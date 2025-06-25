@@ -1,18 +1,20 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { account } from '../appwrite'; // Import instance akun dari file konfigurasi
 import Test from './Test';
 import Dashboard from './students/Dashboard';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
-const LoginPage = () => {
+const LoginPage = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  // const [loggedInUser, setLoggedInUser] = useState(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  // const navigate = useNavigate();
+  // const [userAccount, setUserAccount] = useState([]);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => { // <-- TAMBAHAN
     setIsPasswordVisible(prevState => !prevState);
@@ -29,17 +31,16 @@ const LoginPage = () => {
 
       // Jika berhasil, ambil data pengguna yang sedang login
       const user = await account.get();
-      setLoggedInUser(user);
+      onLoginSuccess(user);
 
     } catch (err) {
       console.error('Gagal melakukan login:', err);
-      setError(err.message); // Tampilkan pesan error dari Appwrite
-      setLoggedInUser(null);
+      setError(err.message); 
     }
   };
 
   // Jika belum login, tampilkan form login
-  if (!loggedInUser) {
+  // if (!loggedInUser) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[url(bg.png)]">
         <img src="bg.png" alt="background" className='hidden' />
@@ -86,11 +87,11 @@ const LoginPage = () => {
         </div>
       </div>
     )
-  }
+  // }
 
-  return (
-    <Navigate to="/dashboard" />
-  )
+  // return (
+  //   <Navigate to="/dashboard" />
+  // )
 };
 
 export default LoginPage;
