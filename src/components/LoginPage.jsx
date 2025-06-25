@@ -42,6 +42,7 @@ const LoginPage = () => {
   if (!loggedInUser) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[url(bg.png)]">
+        <img src="bg.png" alt="background" className='hidden' />
         <div id="defaultModal" tabindex="-1" className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
           <div className="relative p-4 w-full max-w-lg h-full md:h-auto">
             <div className="relative p-4 bg-white rounded-lg shadow">
