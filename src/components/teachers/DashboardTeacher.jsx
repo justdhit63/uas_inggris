@@ -164,14 +164,17 @@ const DashboardTeacher = ({ user, onLogout }) => {
                         <NavLink to="/dashboard/students" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
                             <BsPeopleFill /> Students
                         </NavLink>
-                        <NavLink to="/dashboard/attendance" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
+                        <NavLink to="/dashboard/grading" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
                             <MdCalendarToday /> Attendance
                         </NavLink>
                         <NavLink to="/dashboard/materials" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
                             <FaBookOpen /> Learning Materials
                         </NavLink>
-                        <NavLink to="/dashboard/tasks" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
+                        <NavLink to="/dashboard/create-quiz" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
                             <FaClipboardList /> Task
+                        </NavLink>
+                        <NavLink to="/dashboard/grade-recap" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
+                            <FaClipboardList /> Recap
                         </NavLink>
                     </nav>
                 </div>

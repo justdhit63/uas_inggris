@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { account } from '../appwrite'; // Import instance akun dari file konfigurasi
-import Test from './Test';
+import { account } from '../appwrite';
 import Dashboard from './students/DashboardStudent';
 import { Route, Link, useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';

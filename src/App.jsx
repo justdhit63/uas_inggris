@@ -9,6 +9,12 @@ import MaterialsTeacher from './components/teachers/MaterialsTeacher';
 import Students from './components/teachers/Students';
 import { account } from './appwrite';
 import MaterialsStudent from './components/students/MaterialsStudent';
+import CreateQuizPage from './components/teachers/CreateQuizPage';
+import QuizListStudent from './components/students/QuizListStudent';
+import TakeQuizPage from './components/students/TakeQuizPage';
+import GradingListPage from './components/teachers/GradingListPage';
+import GradingDetailPage from './components/teachers/GradingDetailPage';
+import GradeRecapPage from './components/teachers/GradeRecapPage';
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -71,6 +77,10 @@ const App = () => {
         >
           <Route path="materials" element={<MaterialsTeacher />} />
           <Route path="students" element={<Students />} />
+          <Route path="create-quiz" element={<CreateQuizPage />} />
+          <Route path="grading" element={<GradingListPage />} />
+          <Route path="grade-submission/:submissionId" element={<GradingDetailPage />} />
+          <Route path="grade-recap" element={<GradeRecapPage />} />
         </Route>
         <Route
           path="/dashboard-student"
@@ -81,6 +91,8 @@ const App = () => {
           }
         >
           <Route path="materials" element={<MaterialsStudent />} />
+          <Route path="tasks" element={<QuizListStudent />} />
+          <Route path="take-quiz/:quizId" element={<TakeQuizPage />} />
         </Route>
       </Routes>
     </div>
