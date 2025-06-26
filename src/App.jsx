@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import { Routes, Route, useNavigate } from 'react-router-dom';
