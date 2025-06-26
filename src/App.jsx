@@ -4,8 +4,10 @@ import Hero from './components/Hero';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import DashboardTeacher from './components/teachers/DashboardTeacher';
+import DashboardStudent from './components/students/DashboardStudent';
 import ProtectedRoute from './components/ProtectedRoute'; // Kita akan gunakan ini
 import MaterialsTeacher from './components/teachers/MaterialsTeacher';
+import Students from './components/teachers/Students';
 import { account } from './appwrite';
 
 const App = () => {
@@ -28,9 +30,16 @@ const App = () => {
     checkSession();
   }, []);
 
+
   const handleLoginSuccess = (user) => {
     setLoggedInUser(user);
-    navigate('/dashboard'); // Arahkan ke dashboard setelah login berhasil
+    if (user.labels.includes('teacher')) {
+      navigate('/dashboard');
+    } else if (user.labels.includes('student')) {
+      navigate('/dashboard-student');
+    } else {
+      navigate('/login');
+    }
   };
 
   const handleLogout = async () => {
@@ -60,9 +69,17 @@ const App = () => {
             </ProtectedRoute>
           }
         >
-          {/* Rute untuk /dashboard/materials sekarang menjadi anak dari /dashboard */}
-          {/* URL lengkapnya adalah /dashboard/materials */}
           <Route path="materials" element={<MaterialsTeacher />} />
+          <Route path="students" element={<Students />} />
+        </Route>
+        <Route
+          path="/dashboard-student"
+          element={
+            <ProtectedRoute user={loggedInUser}>
+              <DashboardStudent user={loggedInUser} onLogout={handleLogout} />
+            </ProtectedRoute>
+          }
+        >
         </Route>
       </Routes>
     </div>

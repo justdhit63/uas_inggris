@@ -1,4 +1,4 @@
-import { Client, Account, Databases } from 'appwrite';
+import { Client, Account, Databases, Functions } from 'appwrite';
 
 // Inisialisasi Klien Appwrite
 const client = new Client();
@@ -11,5 +11,6 @@ client
 // Buat instance untuk Akun (Authentication)
 export const account = new Account(client);
 export const databases = new Databases(client);
+export const functions = new Functions(client);
 
 export default client;

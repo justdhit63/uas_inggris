@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { account } from '../appwrite'; // Import instance akun dari file konfigurasi
 import Test from './Test';
-import Dashboard from './students/Dashboard';
+import Dashboard from './students/DashboardStudent';
 import { Route, Link, useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
