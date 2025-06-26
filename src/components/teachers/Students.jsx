@@ -7,8 +7,8 @@ import { functions } from '../../appwrite';
 
 const Students = () => {
     const [students, setStudents] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
@@ -52,24 +52,24 @@ const Students = () => {
     }
 
     return (
-        <div>
+        <div className='w-full px-8 py-8'>
             {/* Main Content */}
-            <main className="flex-1 p-8 overflow-auto">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Total students: {filteredStudents.length}</h2>
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            className="border border-gray-300 rounded-md px-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-purple-400"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        <button className="absolute right-2 top-2 text-purple-600">🔍</button>
-                    </div>
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Total students: {filteredStudents.length}</h2>
+                <div className="relative">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        className="border border-gray-300 rounded-md px-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button className="absolute right-2 top-2 text-purple-600">🔍</button>
                 </div>
+            </div>
 
-                <table className="w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <div className="w-full">
+                <table className="bg-white shadow-md rounded-lg overflow-hidden w-full ">
                     <thead className="bg-gray-100 text-left text-sm text-gray-600">
                         <tr>
                             <th className="px-6 py-4">Name</th>
@@ -103,7 +103,7 @@ const Students = () => {
                         )}
                     </tbody>
                 </table>
-            </main>
+            </div>
         </div>
     )
 }

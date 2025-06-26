@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute'; // Kita akan gunakan i
 import MaterialsTeacher from './components/teachers/MaterialsTeacher';
 import Students from './components/teachers/Students';
 import { account } from './appwrite';
+import MaterialsStudent from './components/students/MaterialsStudent';
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -80,6 +81,7 @@ const App = () => {
             </ProtectedRoute>
           }
         >
+          <Route path="materials" element={<MaterialsStudent />} />
         </Route>
       </Routes>
     </div>

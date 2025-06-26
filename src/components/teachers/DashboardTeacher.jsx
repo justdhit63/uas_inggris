@@ -1,26 +1,69 @@
 // src/components/teachers/DashboardTeacher.jsx
 
 // DIUBAH: Impor NavLink, Outlet, dan useOutlet. Hapus useState dan MaterialsTeacher.
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useOutlet } from 'react-router-dom';
 import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap } from "react-icons/fa";
 import { MdCalendarToday } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
+import { functions, databases } from '../../appwrite';
 
 const DashboardTeacher = ({ user, onLogout }) => {
+    const [students, setStudents] = useState([]);
+    const [materials, setMaterials] = useState([]);
+
+    const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
+    const COLLECTION_ID = import.meta.env.VITE_APPWRITE_MATERIALS_COLLECTION_ID
+
+    const getMaterials = async () => {
+        try {
+            const response = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
+            setMaterials(response.documents);
+        } catch (error) {
+            console.error("Error fetching materials", error);
+        }
+    }
+
+    useEffect(() => {
+        getMaterials();
+    }, [])
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            try {
+                // Panggil Appwrite Function berdasarkan NAMA atau ID-nya
+                // Pastikan nama 'getStudents' sama dengan nama fungsi di dashboard Appwrite
+                const response = await functions.createExecution('685d0bac00245689b453');
+
+                // Response dari function adalah string JSON, jadi perlu di-parse
+                if (response.status === 'completed') {
+                    const studentData = JSON.parse(response.responseBody);
+                    setStudents(studentData);
+                } else {
+                    throw new Error('Eksekusi fungsi gagal: ' + response.stderr);
+                }
+
+            } catch (err) {
+                console.error("Gagal memuat data murid:", err);
+            }
+        };
+
+        fetchStudents();
+    }, []);
+
     // DIHAPUS: State untuk mengganti view tidak diperlukan lagi.
     // const [currentView, setCurrentView] = useState('dashboard');
 
-    const students = [
-        { name: "Daniel Moore", id: "12384309", progress: 90 },
-        { name: "John Scott", id: "47893225", progress: 75 },
-        { name: "Maria Gomez", id: "38294729", progress: 60 },
-        { name: "Anthony Adams", id: "38579393", progress: 45 },
-        { name: "Sarah Davis", id: "35739237", progress: 30 },
-        { name: "John Hill", id: "39258486", progress: 70 },
-        { name: "Anthony Davis", id: "58510934", progress: 85 },
-        { name: "Elizabeth Allen", id: "47854029", progress: 100 },
-    ];
+    // const students = [
+    //     { name: "Daniel Moore", id: "12384309", progress: 90 },
+    //     { name: "John Scott", id: "47893225", progress: 75 },
+    //     { name: "Maria Gomez", id: "38294729", progress: 60 },
+    //     { name: "Anthony Adams", id: "38579393", progress: 45 },
+    //     { name: "Sarah Davis", id: "35739237", progress: 30 },
+    //     { name: "John Hill", id: "39258486", progress: 70 },
+    //     { name: "Anthony Davis", id: "58510934", progress: 85 },
+    //     { name: "Elizabeth Allen", id: "47854029", progress: 100 },
+    // ];
 
     // DIHAPUS: Fungsi ini tidak lagi diperlukan karena navigasi ditangani oleh NavLink.
     // const handleBackToDashboard = () => { ... };
@@ -38,11 +81,11 @@ const DashboardTeacher = ({ user, onLogout }) => {
     const renderDashboard = () => (
         <main className="flex-1 p-8 overflow-auto">
             {/* ... Konten header, kartu, dan tabel Anda tidak berubah ... */}
-             <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6">
                 <h1 className="text-xl font-bold">Dashboard</h1>
                 <div className="flex items-center gap-4">
                     <span className="font-semibold">{user ? user.name : 'Teacher'}</span>
-                    <img src="/logo.png" alt="profile" className="w-10 h-10 rounded-full object-cover"/>
+                    <img src="/logo.png" alt="profile" className="w-10 h-10 rounded-full object-cover" />
                 </div>
             </div>
             <div className="grid grid-cols-3 gap-6 mb-6">
@@ -51,11 +94,11 @@ const DashboardTeacher = ({ user, onLogout }) => {
                     <div className="flex justify-between items-center"><span>Ungraded Assignments</span><FaClipboardList className="text-xl" /></div>
                 </div>
                 <div className="bg-violet-500 text-white p-6 rounded-lg shadow flex flex-col justify-between">
-                    <div className="text-3xl font-bold">360</div>
+                    <div className="text-3xl font-bold">{materials.length}</div>
                     <div className="flex justify-between items-center"><span>Total Materials</span><FaBookOpen className="text-xl" /></div>
                 </div>
                 <div className="bg-teal-400 text-white p-6 rounded-lg shadow flex flex-col justify-between">
-                    <div className="text-3xl font-bold">360</div>
+                    <div className="text-3xl font-bold">{students.length}</div>
                     <div className="flex justify-between items-center"><span>Students</span><FaGraduationCap className="text-xl" /></div>
                 </div>
             </div>
@@ -63,18 +106,31 @@ const DashboardTeacher = ({ user, onLogout }) => {
                 <div className="col-span-2 bg-white p-6 rounded-lg shadow">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-lg font-semibold">Students Performance</h3>
-                        <button className="text-sm bg-orange-500 text-white px-3 py-1 rounded">View All</button>
                     </div>
                     <table className="w-full text-sm text-left">
-                        <thead><tr className="text-gray-600 border-b"><th>Name</th><th>ID Student</th><th>Class</th><th>Task</th></tr></thead>
+                        <thead>
+                            <tr className="text-gray-600 border-b">
+                                <th>Name</th>
+                                <th>ID Student</th>
+                                <th>Class</th>
+                            </tr>
+                        </thead>
                         <tbody>
-                            {students.map((student, idx) => (
-                                <tr key={idx} className="border-b">
-                                    <td className="py-2 flex items-center gap-2"><img src={`https://i.pravatar.cc/150?img=${idx + 1}`} alt="avatar" className="w-6 h-6 rounded-full" />{student.name}</td>
-                                    <td>ID: {student.id}</td><td>10th Class</td>
-                                    <td><div className="w-full bg-gray-200 rounded-full h-2"><div className="bg-[#ef5b4c] h-2 rounded-full" style={{ width: `${student.progress}%` }}></div></div></td>
-                                </tr>
-                            ))}
+                            {students.length > 0 ? (
+                                students.map((student) => (
+                                    <tr key={student.$id} className="border-b">
+                                        <td className="py-2 flex items-center gap-2">
+                                            <img src={`https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png`} alt={student.name} className="w-6 h-6 rounded-full" />
+                                            {student.name}
+                                        </td>
+                                        <td>ID: {student.phone}</td>
+                                        <td>{student.email}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <p>None..</p>
+                            )}
+
                         </tbody>
                     </table>
                 </div>
@@ -126,7 +182,7 @@ const DashboardTeacher = ({ user, onLogout }) => {
                     </a>
                 </div>
             </aside>
-            
+
             {/* DIUBAH: Logika untuk menampilkan konten utama */}
             {outlet ? <Outlet /> : renderDashboard()}
         </div>
