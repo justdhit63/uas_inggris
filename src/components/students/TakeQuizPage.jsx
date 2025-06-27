@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { databases, account } from '../../appwrite';
+import { databases, account, storage } from '../../appwrite';
 import { ID, Query } from 'appwrite';
 
 const DB_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -10,6 +10,7 @@ const QUIZZES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_QUIZZES_COLLECTION_I
 const QUESTIONS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_QUESTIONS_COLLECTION_ID;
 const SUBMISSIONS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_SUBMISSIONS_COLLECTION_ID;
 const ANSWERS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_ANSWERS_COLLECTION_ID;
+const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
 
 const TakeQuizPage = () => {
     const { quizId } = useParams();
@@ -103,7 +104,7 @@ const TakeQuizPage = () => {
             });
 
             await Promise.all(answerPromises);
-            
+
             alert('Quiz submitted successfully!');
             navigate('/dashboard-student');
 
@@ -123,10 +124,24 @@ const TakeQuizPage = () => {
         <div className="p-8 w-full">
             <h1 className="text-2xl font-bold mb-2">{quiz?.title}</h1>
             <p className="text-gray-600 mb-6">{quiz?.description}</p>
-            
+
             <div className="space-y-6">
                 {questions.map((q, index) => (
                     <div key={q.$id} className="bg-white p-4 rounded-lg shadow-md">
+                        {q.audioFileId && (
+                            <div className="mb-4">
+                                <p className="font-semibold mb-2">Listen :</p>
+                                <audio controls className="w-full">
+                                    <source
+                                        src={storage.getFileView(BUCKET_ID, q.audioFileId)}
+                                        type="audio/mpeg" // Anda bisa sesuaikan tipe file jika perlu
+                                    />
+                                    Your Browser is not Supported for Audio File.
+                                </audio>
+                            </div>
+                        )}
+
+                        <p className="font-semibold mb-2">{index + 1}. {q.questionText} ({q.maxPoints} poin)</p>
                         <p className="font-semibold mb-2">{index + 1}. {q.questionText} ({q.maxPoints} poin)</p>
                         {q.questionType === 'multiple_choice' ? (
                             <div className="space-y-2">
@@ -155,8 +170,8 @@ const TakeQuizPage = () => {
                 ))}
             </div>
 
-            <button 
-                onClick={handleQuizSubmit} 
+            <button
+                onClick={handleQuizSubmit}
                 className="mt-8 mb-8 bg-green-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400"
                 disabled={isLoading}
             >

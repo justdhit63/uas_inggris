@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { databases } from '../../appwrite';
-import { ID, Query } from 'appwrite';
+import { databases, storage } from '../../appwrite';
+import { ID, Query, Client, Account, Databases, Functions, Storage } from 'appwrite';
 import { useNavigate } from 'react-router-dom';
 
-const DB_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
-const MATERIALS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_MATERIALS_COLLECTION_ID
-const QUIZZES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_QUIZZES_COLLECTION_ID
-const QUESTIONS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_QUESTIONS_COLLECTION_ID
+const DB_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const MATERIALS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_MATERIALS_COLLECTION_ID;
+const QUIZZES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_QUIZZES_COLLECTION_ID;
+const QUESTIONS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_QUESTIONS_COLLECTION_ID;
+const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
 
 const CreateQuizPage = () => {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const CreateQuizPage = () => {
     // State untuk data dari luar
     const [materials, setMaterials] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [audioFile, setAudioFile] = useState(null);
 
     // State untuk form kuis
     const [quizFormData, setQuizFormData] = useState({
@@ -84,19 +86,31 @@ const CreateQuizPage = () => {
         if (!createdQuiz) return;
         setIsLoading(true);
 
-        let questionData = {
-            quiz: createdQuiz.$id,
-            questionType,
-            questionText,
-            maxPoints: parseInt(maxPoints, 10),
-        };
-
-        if (questionType === 'multiple_choice') {
-            questionData.options = options.filter(opt => opt !== '');
-            questionData.correctAnswerIndex = parseInt(correctAnswerIndex, 10);
-        }
-
         try {
+            let audioFileId = null;
+
+            // 1. Upload file audio jika ada
+            if (audioFile) {
+                const uploadedFile = await storage.createFile(
+                    BUCKET_ID,
+                    ID.unique(),
+                    audioFile
+                );
+                audioFileId = uploadedFile.$id;
+            }
+
+            let questionData = {
+                quiz: createdQuiz.$id,
+                questionType,
+                questionText,
+                maxPoints: parseInt(maxPoints, 10),
+                audioFileId: audioFileId,
+            };
+
+            if (questionType === 'multiple_choice') {
+                questionData.options = options.filter(opt => opt !== '');
+                questionData.correctAnswerIndex = parseInt(correctAnswerIndex, 10);
+            }
             await databases.createDocument(
                 DB_ID,
                 QUESTIONS_COLLECTION_ID,
@@ -108,6 +122,8 @@ const CreateQuizPage = () => {
             setQuestionText('');
             setOptions['', '', '', ''];
             setMaxPoints(10);
+            setAudioFile(null);
+            e.target.reset();
         } catch (error) {
             console.error("Failed adding question :", error);
             alert('Failed adding question.');
@@ -126,6 +142,15 @@ const CreateQuizPage = () => {
                 <fieldset disabled={createdQuiz || isLoading}>
                     <legend className="text-lg font-semibold mb-4">Quiz Detail</legend>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="mb-4">
+                            <label className="block mb-2">File Audio (Opsional untuk Soal Listening)</label>
+                            <input
+                                type="file"
+                                accept="audio/*"
+                                onChange={(e) => setAudioFile(e.target.files[0])}
+                                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                            />
+                        </div>
                         <div>
                             <label htmlFor="title" className="block mb-2">Title</label>
                             <input type="text" id="title" name="title" value={quizFormData.title} onChange={handleQuizFormChange} className="w-full border rounded p-2" required />
