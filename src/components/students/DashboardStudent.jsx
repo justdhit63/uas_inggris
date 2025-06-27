@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useOutlet, Link } from 'react-router-dom';
-import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap } from "react-icons/fa";
+import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap, FaBook } from "react-icons/fa";
 import { MdCalendarToday } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
 import { databases } from '../../appwrite';
@@ -176,6 +176,9 @@ const DashboardStudent = ({ user, onLogout }) => {
             </NavLink>
             <NavLink to="/dashboard-student/tasks" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
               <FaClipboardList /> Task
+            </NavLink>
+            <NavLink to="/dashboard-student/books" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
+              <FaBook /> Book
             </NavLink>
           </nav>
         </div>

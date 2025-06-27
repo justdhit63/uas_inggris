@@ -3,7 +3,7 @@
 // DIUBAH: Impor NavLink, Outlet, dan useOutlet. Hapus useState dan MaterialsTeacher.
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useOutlet } from 'react-router-dom';
-import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap, FaClipboardCheck } from "react-icons/fa";
+import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap, FaClipboardCheck, FaBook } from "react-icons/fa";
 import { MdCalendarToday } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
 import { functions, databases } from '../../appwrite';
@@ -176,6 +176,9 @@ const DashboardTeacher = ({ user, onLogout }) => {
                         </NavLink>
                         <NavLink to="/dashboard/grade-recap" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
                             <FaClipboardList /> Recap Quiz
+                        </NavLink>
+                        <NavLink to="/dashboard/upload-book" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
+                            <FaBook /> Add Books
                         </NavLink>
                     </nav>
                 </div>

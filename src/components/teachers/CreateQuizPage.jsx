@@ -143,7 +143,7 @@ const CreateQuizPage = () => {
                     <legend className="text-lg font-semibold mb-4">Quiz Detail</legend>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="mb-4">
-                            <label className="block mb-2">File Audio (Opsional untuk Soal Listening)</label>
+                            <label className="block mb-2">Audio File (Optional)</label>
                             <input
                                 type="file"
                                 accept="audio/*"

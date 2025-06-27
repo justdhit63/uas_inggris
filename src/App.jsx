@@ -15,6 +15,8 @@ import TakeQuizPage from './components/students/TakeQuizPage';
 import GradingListPage from './components/teachers/GradingListPage';
 import GradingDetailPage from './components/teachers/GradingDetailPage';
 import GradeRecapPage from './components/teachers/GradeRecapPage';
+import UploadBookPage from './components/teachers/UploadBookPage';
+import BookSectionPage from './components/students/BookSectionPage';
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -81,6 +83,7 @@ const App = () => {
           <Route path="grading" element={<GradingListPage />} />
           <Route path="grade-submission/:submissionId" element={<GradingDetailPage />} />
           <Route path="grade-recap" element={<GradeRecapPage />} />
+          <Route path="upload-book" element={<UploadBookPage />} />
         </Route>
         <Route
           path="/dashboard-student"
@@ -93,6 +96,7 @@ const App = () => {
           <Route path="materials" element={<MaterialsStudent />} />
           <Route path="tasks" element={<QuizListStudent />} />
           <Route path="take-quiz/:quizId" element={<TakeQuizPage />} />
+          <Route path="books" element={<BookSectionPage />} />
         </Route>
       </Routes>
     </div>

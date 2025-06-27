@@ -51,7 +51,7 @@ const QuizListStudent = () => {
     const renderStatusButton = (quiz) => {
         switch (quiz.submissionStatus) {
             case 'graded':
-                return <span className="px-4 py-2 text-sm font-semibold text-white bg-green-500 rounded-full">Finish (Nilai: {quiz.finalScore})</span>;
+                return <span className="px-4 py-2 text-sm font-semibold text-white bg-green-500 rounded-full">Finish (Score: {quiz.finalScore})</span>;
             case 'partially_graded':
             case 'submitted':
                 return <span className="px-4 py-2 text-sm font-semibold text-white bg-yellow-500 rounded-full">Waiting for Grading</span>;
