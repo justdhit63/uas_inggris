@@ -2,19 +2,49 @@
 
 // DIUBAH: Impor NavLink, Outlet, dan useOutlet. Hapus useState dan MaterialsTeacher.
 import React, { useState, useEffect } from 'react';
-import { NavLink, Outlet, useOutlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useOutlet } from 'react-router-dom';
 import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap, FaClipboardCheck, FaBook } from "react-icons/fa";
 import { MdCalendarToday } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
 import { functions, databases } from '../../appwrite';
 import { FaClipboardQuestion } from 'react-icons/fa6';
+import { Query } from 'appwrite';
+import { IoMdCalendar } from 'react-icons/io';
+
+const DB_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const SUBMISSIONS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_SUBMISSIONS_COLLECTION_ID;
 
 const DashboardTeacher = ({ user, onLogout }) => {
     const [students, setStudents] = useState([]);
     const [materials, setMaterials] = useState([]);
+    const [ungradedCount, setUngradedCount] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
     const COLLECTION_ID = import.meta.env.VITE_APPWRITE_MATERIALS_COLLECTION_ID
+
+    useEffect(() => {
+        const fetchUngradedCount = async () => {
+            try {
+                // Ambil jumlah submission dengan status 'partially_graded'
+                const response = await databases.listDocuments(
+                    DB_ID,
+                    SUBMISSIONS_COLLECTION_ID,
+                    [
+                        Query.equal('status', 'partially_graded'),
+                        Query.limit(1) // Trik efisiensi, kita hanya butuh totalnya
+                    ]
+                );
+                setUngradedCount(response.total);
+            } catch (error) {
+                console.error("Gagal mengambil data tugas belum dinilai:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchUngradedCount();
+    }, []);
 
     const getMaterials = async () => {
         try {
@@ -90,23 +120,27 @@ const DashboardTeacher = ({ user, onLogout }) => {
                 </div>
             </div>
             <div className="grid grid-cols-3 gap-6 mb-6">
-                <div className="bg-orange-400 text-white p-6 rounded-lg shadow flex flex-col justify-between">
-                    <div className="text-3xl font-bold">360</div>
+                <Link to='/dashboard/grading' className="bg-orange-400 text-white p-6 rounded-lg shadow flex flex-col justify-between">
+                    {isLoading ? (
+                        <div className="text-3xl font-bold">...</div>
+                    ) : (
+                        <div className="text-3xl font-bold">{ungradedCount}</div>
+                    )}
                     <div className="flex justify-between items-center"><span>Ungraded Assignments</span><FaClipboardList className="text-xl" /></div>
-                </div>
-                <div className="bg-violet-500 text-white p-6 rounded-lg shadow flex flex-col justify-between">
+                </Link>
+                <Link to='/dashboard/materials' className="bg-violet-500 text-white p-6 rounded-lg shadow flex flex-col justify-between">
                     <div className="text-3xl font-bold">{materials.length}</div>
                     <div className="flex justify-between items-center"><span>Total Materials</span><FaBookOpen className="text-xl" /></div>
-                </div>
-                <div className="bg-teal-400 text-white p-6 rounded-lg shadow flex flex-col justify-between">
+                </Link>
+                <Link to='/dashboard/students' className="bg-teal-400 text-white p-6 rounded-lg shadow flex flex-col justify-between">
                     <div className="text-3xl font-bold">{students.length}</div>
                     <div className="flex justify-between items-center"><span>Students</span><FaGraduationCap className="text-xl" /></div>
-                </div>
+                </Link>
             </div>
             <div className="grid grid-cols-3 gap-6">
                 <div className="col-span-2 bg-white p-6 rounded-lg shadow">
                     <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold">Students Performance</h3>
+                        <h3 className="text-lg font-semibold">Students</h3>
                     </div>
                     <table className="w-full text-sm text-left">
                         <thead>
@@ -136,8 +170,27 @@ const DashboardTeacher = ({ user, onLogout }) => {
                     </table>
                 </div>
                 <div className="flex flex-col gap-6">
-                    {/* <div className="bg-white p-6 rounded-lg shadow"><h3 className="text-lg font-semibold mb-2">June 2025</h3><div className="grid grid-cols-7 text-center text-sm text-gray-600 gap-1">{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (<div key={day}>{day}</div>))}[...Array(30)].map((_, i) => (<div key={i} className="py-1">{i + 1}</div>))}</div></div> */}
-                    <div className="bg-white p-6 rounded-lg shadow"><h3 className="text-lg font-semibold mb-4">Today</h3><div className="flex items-center gap-4"><div className="w-28 h-28 rounded-full bg-gradient-to-tr from-green-400 via-green-400 to-purple-400 relative"><div className="absolute inset-4 bg-white rounded-full"></div></div><div className="text-sm"><p><span className="inline-block w-3 h-3 bg-green-400 rounded-full mr-2"></span>Present 85%</p><p><span className="inline-block w-3 h-3 bg-purple-400 rounded-full mr-2"></span>Absent 15%</p></div></div></div>
+                    <div className="bg-white p-6 rounded-lg shadow col-span-1">
+                        <div className="flex justify-between items-center mb-2">
+                            <h3 className="font-semibold">June 2025</h3>
+                            <IoMdCalendar className="text-xl" />
+                        </div>
+                        <div className="grid grid-cols-7 text-center text-gray-500 text-sm mb-2">
+                            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                                <div key={day}>{day}</div>
+                            ))}
+                        </div>
+                        <div className="grid grid-cols-7 text-center text-sm gap-1">
+                            {Array.from({ length: 30 }, (_, i) => (
+                                <div
+                                    key={i}
+                                    className="py-1 text-gray-700 hover:bg-gray-200 rounded cursor-default"
+                                >
+                                    {i + 1}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

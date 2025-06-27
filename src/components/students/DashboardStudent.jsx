@@ -3,15 +3,21 @@ import { NavLink, Outlet, useOutlet, Link } from 'react-router-dom';
 import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap, FaBook } from "react-icons/fa";
 import { MdCalendarToday } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
-import { databases } from '../../appwrite';
+import { databases, account } from '../../appwrite';
 import { IoMdCalendar } from "react-icons/io";
+import { Query } from 'appwrite';
 
 const DashboardStudent = ({ user, onLogout }) => {
   const outlet = useOutlet();
   const [materials, setMaterials] = useState([]);
+  const [unfinishedTasks, setUnfinishedTasks] = useState(0);
+  const [isLoadingTasks, setIsLoadingTasks] = useState(true);
+  const [task, setTask] = useState([]);
 
   const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID
   const COLLECTION_ID = import.meta.env.VITE_APPWRITE_MATERIALS_COLLECTION_ID
+  const QUIZZES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_QUIZZES_COLLECTION_ID
+  const SUBMISSIONS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_SUBMISSIONS_COLLECTION_ID
 
   const getMaterials = async () => {
     try {
@@ -25,6 +31,60 @@ const DashboardStudent = ({ user, onLogout }) => {
   useEffect(() => {
     getMaterials();
   }, [])
+
+  const getQuizzes = async () => {
+    try {
+      const response = await databases.listDocuments(DATABASE_ID, QUIZZES_COLLECTION_ID);
+      setTask(response.documents);
+    } catch (error) {
+      console.error("Error fetching tasks: ", error);
+    }
+  };
+
+  useEffect(() => {
+    getQuizzes();
+  }, [])
+  
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setIsLoadingTasks(true);
+      try {
+        // 1. Ambil ID siswa yang sedang login
+        const currentUser = await account.get();
+        const studentId = currentUser.$id;
+
+        // 2. Ambil data materi (seperti sebelumnya)
+        const materialsResponse = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
+        setMaterials(materialsResponse.documents.slice(0, 5));
+
+        // 3. Ambil jumlah total kuis yang ada
+        const totalQuizzesResponse = await databases.listDocuments(DATABASE_ID, QUIZZES_COLLECTION_ID, [Query.limit(1)]); // Cukup ambil 1 untuk mendapatkan total
+        const totalQuizzes = totalQuizzesResponse.total;
+
+        // 4. Ambil jumlah kuis yang sudah dikerjakan oleh siswa ini
+        const submittedQuizzesResponse = await databases.listDocuments(
+          DATABASE_ID,
+          SUBMISSIONS_COLLECTION_ID,
+          [
+            Query.equal('studentId', studentId),
+            Query.limit(1) // Cukup ambil 1 untuk mendapatkan total
+          ]
+        );
+        const submittedCount = submittedQuizzesResponse.total;
+
+        // 5. Hitung selisihnya dan simpan ke state
+        setUnfinishedTasks(totalQuizzes - submittedCount);
+
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setIsLoadingTasks(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   const activeLinkStyle = {
     color: '#ef5b4c',
@@ -53,14 +113,18 @@ const DashboardStudent = ({ user, onLogout }) => {
         <div className="backdrop-brightness-90 w-full">
           <div className="flex justify-center">
             <div className="grid grid-cols-2 gap-4 my-12">
-              <div className="bg-orange-400 text-white p-6 rounded-lg flex flex-col justify-between h-32 w-64 items-center">
-                <span className="text-2xl font-bold text-center">360</span>
+              <Link to='/dashboard-student/tasks' className="bg-orange-400 text-white p-6 rounded-lg flex flex-col justify-between h-32 w-64 items-center">
+                {isLoadingTasks ? (
+                  <span className="text-2xl font-bold text-center">...</span>
+                ) : (
+                  <span className="text-2xl font-bold text-center">{unfinishedTasks}</span>
+                )}
                 <span>Unfinished tasks</span>
-              </div>
-              <div className="bg-violet-500 text-white p-6 rounded-lg flex flex-col justify-between items-center h-32">
+              </Link>
+              <Link to='/dashboard-student/materials' className="bg-violet-500 text-white p-6 rounded-lg flex flex-col justify-between items-center h-32">
                 <span className="text-2xl font-bold">{materials.length}</span>
                 <span>Total Materials</span>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -127,28 +191,28 @@ const DashboardStudent = ({ user, onLogout }) => {
         <div className="bg-white p-6 rounded-lg shadow col-span-3 mt-4">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-lg">Task</h3>
-            <button className="text-sm text-white bg-violet-500 px-4 py-1 rounded-md">
+            <Link to='/dashboard-student/tasks' className="text-sm text-white bg-violet-500 px-4 py-1 rounded-md">
               View All
-            </button>
+            </Link>
           </div>
           <table className="w-full text-sm text-left">
             <thead>
-              <tr className="text-gray-600 border-b">
+              <tr className="text-gray-600 border-b mb-4">
                 <th className="py-2">Title</th>
-                <th className="py-2">Date</th>
-                <th className="py-2">Due</th>
-                <th className="py-2">Status</th>
+                <th className="py-2">Description</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-t">
-                <td>Connect Words</td>
-                <td>Jul 04, 2024</td>
-                <td>Jul 17, 2024</td>
-                <td>
-                  <span className="text-sm">✏️</span>
-                </td>
-              </tr>
+                {task.length > 0 ? (
+                  task.map((quiz) => (
+                    <tr className='border-b border-b-gray-900'>
+                      <td>{quiz.title}</td>
+                      <td>{quiz.description}</td>
+                    </tr>
+                  ))
+                ) : (
+                <tr><td colSpan="2" className="text-center py-6">No tasks added yet.</td></tr>
+                )}
             </tbody>
           </table>
         </div>

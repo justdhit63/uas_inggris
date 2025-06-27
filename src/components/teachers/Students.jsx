@@ -84,7 +84,7 @@ const Students = () => {
                                 <tr key={student.$id} className="border-b hover:bg-gray-50">
                                     <td className="px-6 py-4 flex items-center gap-3">
                                         <img
-                                            src='logo.png'
+                                            src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
                                             alt={student.name}
                                             className="w-8 h-8 rounded-full"
                                         />
