@@ -150,7 +150,7 @@ const DashboardTeacher = ({ user, onLogout }) => {
     return (
         <div className="flex h-screen font-sans bg-gray-50">
             {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-md px-6 py-8 flex flex-col justify-between">
+            <aside className="w-64 bg-white shadow-md px-6 py-8 flex flex-col justify-between fixed h-full">
                 <div>
                     <div className="flex items-center gap-2 mb-10">
                         <img src="/logo.png" alt="Logo" className="w-8 h-8" />
@@ -188,7 +188,10 @@ const DashboardTeacher = ({ user, onLogout }) => {
             </aside>
 
             {/* DIUBAH: Logika untuk menampilkan konten utama */}
-            {outlet ? <Outlet /> : renderDashboard()}
+            <div className="ml-64 flex-1">
+
+                {outlet ? <Outlet /> : renderDashboard()}
+            </div>
         </div>
     );
 };

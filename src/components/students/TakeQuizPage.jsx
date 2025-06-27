@@ -140,8 +140,6 @@ const TakeQuizPage = () => {
                                 </audio>
                             </div>
                         )}
-
-                        <p className="font-semibold mb-2">{index + 1}. {q.questionText} ({q.maxPoints} poin)</p>
                         <p className="font-semibold mb-2">{index + 1}. {q.questionText} ({q.maxPoints} poin)</p>
                         {q.questionType === 'multiple_choice' ? (
                             <div className="space-y-2">

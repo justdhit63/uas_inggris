@@ -32,37 +32,42 @@ const DashboardStudent = ({ user, onLogout }) => {
   };
 
   const renderDashboard = () => (
-    <main className="flex-1 p-8">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <div className="flex items-center gap-3">
-          <span className="font-semibold">{user.name}</span>
-          <img
-            src="/logo.png"
-            alt="Profile"
-            className="w-10 h-10 rounded-full object-cover"
-          />
+    <main className="flex-1">
+      <div className="py-2 px-4">
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <h1 className="text-lg font-semibold">Dashboard</h1>
+          <div className="flex items-center gap-3">
+            <span className="font-semibold">{user.name}</span>
+            <img
+              src="/logo.png"
+              alt="Profile"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          </div>
         </div>
       </div>
 
       {/* Greeting + Stats */}
-      <div className="flex justify-center">
-
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-orange-400 text-white p-6 rounded-lg flex flex-col justify-between h-32 w-64 items-center">
-            <span className="text-2xl font-bold text-center">360</span>
-            <span>Unfinished tasks</span>
-          </div>
-          <div className="bg-violet-500 text-white p-6 rounded-lg flex flex-col justify-between items-center h-32">
-            <span className="text-2xl font-bold">{materials.length}</span>
-            <span>Total Materials</span>
+      <div className="bg-[url(https://cdn.pixabay.com/photo/2023/03/19/23/28/background-7863504_1280.jpg)]">
+        <div className="backdrop-brightness-90 w-full">
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 gap-4 my-12">
+              <div className="bg-orange-400 text-white p-6 rounded-lg flex flex-col justify-between h-32 w-64 items-center">
+                <span className="text-2xl font-bold text-center">360</span>
+                <span>Unfinished tasks</span>
+              </div>
+              <div className="bg-violet-500 text-white p-6 rounded-lg flex flex-col justify-between items-center h-32">
+                <span className="text-2xl font-bold">{materials.length}</span>
+                <span>Total Materials</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Calendar + Materials + Tasks */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-4 p-4">
         {/* Calendar */}
         <div className="bg-white p-6 rounded-lg shadow col-span-1">
           <div className="flex justify-between items-center mb-2">
@@ -106,10 +111,10 @@ const DashboardStudent = ({ user, onLogout }) => {
             <tbody>
               {materials.length > 0 ? (
                 materials.map((item) => (
-                <tr className="border-t">
-                <td>{item.chapter}</td>
-                <td>{item.title}</td>
-              </tr>
+                  <tr className="border-t">
+                    <td>{item.chapter}</td>
+                    <td>{item.title}</td>
+                  </tr>
                 ))
               ) : (
                 <tr><td colSpan="2" className="text-center py-6">No materials added yet.</td></tr>
@@ -154,14 +159,14 @@ const DashboardStudent = ({ user, onLogout }) => {
   return (
     <div className="flex h-screen font-sans bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-md px-6 py-8 flex flex-col justify-between">
+      <aside className="w-64 bg-white shadow-md px-6 py-8 flex flex-col justify-between fixed h-full">
         <div>
           <div className="flex items-center gap-2 mb-10">
             <img src="/logo.png" alt="Logo" className="w-8 h-8" />
             <span className="text-2xl font-bold text-[#ef5b4c]">Learn<span className="text-black">Sphere</span>.</span>
           </div>
 
-          {/* DIUBAH: Menu sekarang menggunakan NavLink untuk navigasi berbasis URL */}
+          {/* Menu menggunakan NavLink untuk navigasi berbasis URL */}
           <nav className="space-y-6">
             <NavLink to="/dashboard-student" end style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
               <FaHome /> Dashboard
@@ -182,8 +187,9 @@ const DashboardStudent = ({ user, onLogout }) => {
         </div>
       </aside>
 
-      {outlet ? <Outlet /> : renderDashboard()}
-
+      <div className="ml-64 flex-1">
+        {outlet ? <Outlet /> : renderDashboard()}
+      </div>
     </div>
   );
 };

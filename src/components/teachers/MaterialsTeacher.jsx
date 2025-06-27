@@ -119,7 +119,7 @@ const MaterialsTeacher = () => {
     //   };
 
     return (
-        <div>
+        <div className="w-full p-6">
             {/* Main Content */}
                 <div className="bg-white p-6 rounded-lg shadow mb-8">
                     <h2 className="text-xl font-semibold mb-4">

@@ -77,13 +77,13 @@ const GradingListPage = () => {
     }, [selectedQuizId]);
 
     return (
-        <div className="p-8">
+        <div className="p-8 w-full">
             <h1 className="text-2xl font-bold mb-6">Quiz Grading</h1>
 
             {/* Dropdown untuk memilih kuis (tidak ada perubahan) */}
             <div className="mb-6">
             <label htmlFor="quiz-select" className="block text-lg font-medium mb-2">Select a Quiz to Grade</label>
-                <select id="quiz-select" value={selectedQuizId} onChange={(e) => setSelectedQuizId(e.target.value)} className="w-full md:w-1/2 p-2 border rounded-lg">
+                <select id="quiz-select" value={selectedQuizId} onChange={(e) => setSelectedQuizId(e.target.value)} className="w-full md:w-1/4 p-2 border rounded-lg">
                     <option value="">-- Select a Quiz --</option>
                     {quizzes.map(quiz => (<option key={quiz.$id} value={quiz.$id}>{quiz.title}</option>))}
                 </select>
