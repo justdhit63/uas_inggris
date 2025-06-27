@@ -8,7 +8,7 @@ const Hero = () => {
             <section className="bg-white">
                 <div className="max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-12">
                     <div className="flex items-center">
-                        <img className='w-12 h-12 mr-3' src="logo.svg" alt="LearnSphere logo" />
+                        <img className='w-12 h-12 mr-3' src="logo.png" alt="LearnSphere logo" />
                         <h2 className='text-2xl text-red-600'><span className='font-bold'>Learn</span>Sphere</h2>
                     </div>
                 </div>

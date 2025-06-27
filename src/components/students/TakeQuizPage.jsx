@@ -33,7 +33,7 @@ const TakeQuizPage = () => {
                 );
                 setQuestions(questionsResponse.documents);
             } catch (error) {
-                console.error("Gagal memuat kuis:", error);
+                console.error("Error load quizzes:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -104,23 +104,23 @@ const TakeQuizPage = () => {
 
             await Promise.all(answerPromises);
             
-            alert('Kuis berhasil dikirim!');
+            alert('Quiz submitted successfully!');
             navigate('/dashboard-student');
 
         } catch (error) {
-            console.error("Gagal mengirim jawaban:", error);
-            alert('Terjadi kesalahan saat mengirim jawaban.');
+            console.error("Error send answer:", error);
+            alert('An Error occured while submitting your answers.');
         } finally {
             setIsLoading(false);
         }
     };
 
     if (isLoading) {
-        return <div className="p-8 text-center">Memuat soal kuis...</div>;
+        return <div className="p-8 text-center">Loading the quiz...</div>;
     }
 
     return (
-        <div className="p-8">
+        <div className="p-8 w-full">
             <h1 className="text-2xl font-bold mb-2">{quiz?.title}</h1>
             <p className="text-gray-600 mb-6">{quiz?.description}</p>
             
@@ -147,7 +147,7 @@ const TakeQuizPage = () => {
                             <textarea
                                 rows="5"
                                 className="w-full border rounded p-2 mt-2"
-                                placeholder="Ketik jawaban esai Anda di sini..."
+                                placeholder="Enter your essay answer here..."
                                 onChange={(e) => handleAnswerChange(q.$id, e.target.value)}
                             ></textarea>
                         )}
@@ -157,10 +157,10 @@ const TakeQuizPage = () => {
 
             <button 
                 onClick={handleQuizSubmit} 
-                className="mt-8 bg-green-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400"
+                className="mt-8 mb-8 bg-green-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400"
                 disabled={isLoading}
             >
-                {isLoading ? 'Mengirim...' : 'Selesai & Kirim Jawaban'}
+                {isLoading ? 'Submitting...' : 'Finish & Submit Answer'}
             </button>
         </div>
     );

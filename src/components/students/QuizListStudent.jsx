@@ -39,7 +39,7 @@ const QuizListStudent = () => {
             setQuizzes(quizzesWithStatus);
 
         } catch (error) {
-            console.error("Gagal memuat daftar kuis: ", error);
+            console.error("Error fetching quizzes list: ", error);
         } finally {
             setIsLoading(false);
         }
@@ -51,30 +51,30 @@ const QuizListStudent = () => {
     const renderStatusButton = (quiz) => {
         switch (quiz.submissionStatus) {
             case 'graded':
-                return <span className="px-4 py-2 text-sm font-semibold text-white bg-green-500 rounded-full">Selesai (Nilai: {quiz.finalScore})</span>;
+                return <span className="px-4 py-2 text-sm font-semibold text-white bg-green-500 rounded-full">Finish (Nilai: {quiz.finalScore})</span>;
             case 'partially_graded':
             case 'submitted':
-                return <span className="px-4 py-2 text-sm font-semibold text-white bg-yellow-500 rounded-full">Menunggu Penilaian</span>;
+                return <span className="px-4 py-2 text-sm font-semibold text-white bg-yellow-500 rounded-full">Waiting for Grading</span>;
             default:
                 return (
                     <Link to={`/dashboard-student/take-quiz/${quiz.$id}`} className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700">
-                        Kerjakan Kuis
+                        Attempt quiz
                     </Link>
                 );
         }
     };
 
     if (isLoading) {
-        return <div className="p-8 text-center">Memuat daftar tugas...</div>;
+        return <div className="p-8 text-center">Load task list...</div>;
     }
 
   return (
-    <div className="p-8">
-            <h1 className="text-2xl font-bold mb-6">Daftar Tugas & Kuis</h1>
-            <div className="space-y-4">
+    <div className="p-8 w-full">
+            <h1 className="text-2xl font-bold mb-6">List of Quizzes</h1>
+            <div className="space-y-4 grid grid-cols-3 gap-4">
                 {quizzes.length > 0 ? (
                     quizzes.map(quiz => (
-                        <div key={quiz.$id} className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+                        <div key={quiz.$id} className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center h-32">
                             <div>
                                 <h2 className="text-lg font-bold">{quiz.title}</h2>
                                 <p className="text-sm text-gray-600">{quiz.description}</p>
@@ -85,7 +85,7 @@ const QuizListStudent = () => {
                         </div>
                     ))
                 ) : (
-                    <p>Belum ada kuis yang tersedia.</p>
+                    <p>No Quiz available yet.</p>
                 )}
             </div>
         </div>

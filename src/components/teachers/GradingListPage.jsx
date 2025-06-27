@@ -30,7 +30,7 @@ const GradingListPage = () => {
                     setStudentMap(newStudentMap);
                 }
             } catch (error) {
-                console.error("Gagal mengambil data siswa:", error);
+                console.error("Error fetching students data:", error);
             }
         };
         fetchAllStudents();
@@ -43,7 +43,7 @@ const GradingListPage = () => {
                 const response = await databases.listDocuments(DB_ID, QUIZZES_COLLECTION_ID);
                 setQuizzes(response.documents);
             } catch (error) {
-                console.error("Gagal mengambil daftar kuis:", error);
+                console.error("Error Fetching List Quiz:", error);
             }
         };
         fetchQuizzes();
@@ -68,7 +68,7 @@ const GradingListPage = () => {
                 );
                 setSubmissions(response.documents);
             } catch (error) {
-                console.error("Gagal mengambil submission:", error);
+                console.error("Error Fetching Submissions:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -78,33 +78,33 @@ const GradingListPage = () => {
 
     return (
         <div className="p-8">
-            <h1 className="text-2xl font-bold mb-6">Penilaian Kuis</h1>
+            <h1 className="text-2xl font-bold mb-6">Quiz Grading</h1>
 
             {/* Dropdown untuk memilih kuis (tidak ada perubahan) */}
             <div className="mb-6">
-                <label htmlFor="quiz-select" className="block text-lg font-medium mb-2">Pilih Kuis untuk Dinilai:</label>
+            <label htmlFor="quiz-select" className="block text-lg font-medium mb-2">Select a Quiz to Grade</label>
                 <select id="quiz-select" value={selectedQuizId} onChange={(e) => setSelectedQuizId(e.target.value)} className="w-full md:w-1/2 p-2 border rounded-lg">
-                    <option value="">-- Pilih Kuis --</option>
+                    <option value="">-- Select a Quiz --</option>
                     {quizzes.map(quiz => (<option key={quiz.$id} value={quiz.$id}>{quiz.title}</option>))}
                 </select>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Kiriman yang Perlu Dinilai</h2>
-                {isLoading ? <p>Memuat...</p> : (
+                <h2 className="text-xl font-semibold mb-4">Submission to be Graded</h2>
+                {isLoading ? <p>Load...</p> : (
                     <div className="space-y-3">
                         {submissions.length > 0 ? submissions.map(sub => (
                             <div key={sub.$id} className="p-3 border rounded-lg flex justify-between items-center">
                                 <div>
                                     {/* DIUBAH: Ambil nama siswa dari studentMap menggunakan studentId */}
-                                    <p className="font-bold">Siswa: {studentMap.get(sub.studentId)?.name || 'Undefined'}</p>
-                                    <p className="text-sm text-gray-500">Dikirim pada: {new Date(sub.submittedAt).toLocaleString()}</p>
+                                    <p className="font-bold">Student: {studentMap.get(sub.studentId)?.name || 'Undefined'}</p>
+                                    <p className="text-sm text-gray-500">Submitted at: {new Date(sub.submittedAt).toLocaleString()}</p>
                                 </div>
                                 <Link to={`/dashboard/grade-submission/${sub.$id}`} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                                    Nilai Sekarang
+                                    Grade Now
                                 </Link>
                             </div>
-                        )) : <p>Tidak ada kiriman yang perlu dinilai untuk kuis ini.</p>}
+                        )) : <p>There are no submissions to grade for this quiz.</p>}
                     </div>
                 )}
             </div>

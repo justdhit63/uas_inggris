@@ -46,13 +46,13 @@ const GradingDetailPage = () => {
                         if (currentStudent) {
                             setStudentName(currentStudent.name);
                         } else {
-                            setStudentName('Siswa Dihapus/Tidak Ditemukan');
+                            setStudentName('Not Found');
                         }
                     }
                 }
 
             } catch (error) {
-                console.error("Gagal memuat detail submission:", error);
+                console.error("Failed fetching submission details:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -90,30 +90,30 @@ const GradingDetailPage = () => {
                 status: 'graded'
             });
 
-            alert('Nilai berhasil disimpan!');
+            alert('The grade has been saved successfully!');
             navigate('/dashboard/grading');
 
         } catch (error) {
-            console.error("Gagal menyimpan nilai:", error);
-            alert('Terjadi kesalahan saat menyimpan nilai.');
+            console.error("Failed saving grade:", error);
+            alert('An error occured while saving the grade.');
         } finally {
             setIsLoading(false);
         }
     };
 
-    if (isLoading) return <div className="p-8 text-center">Memuat...</div>;
-    if (!submission) return <div className="p-8 text-center">Submission tidak ditemukan.</div>;
+    if (isLoading) return <div className="p-8 text-center">Load...</div>;
+    if (!submission) return <div className="p-8 text-center">Submission not found.</div>;
 
     return (
         <div className="p-8">
             {/* DIUBAH: Logika untuk menampilkan nama sudah diperbaiki */}
-            <h1 className="text-2xl font-bold mb-2">Menilai Kuis: {submission.quiz?.title || 'Judul Kuis'}</h1>
-            <h2 className="text-xl text-gray-700 mb-4">Siswa: {studentName}</h2>
+            <h1 className="text-2xl font-bold mb-2">Quiz Grading: {submission.quiz?.title || 'Judul Kuis'}</h1>
+            <h2 className="text-xl text-gray-700 mb-4">Student: {studentName}</h2>
             
-            <p className="mb-6 p-3 bg-blue-100 rounded-lg">Skor Pilihan Ganda (Otomatis): <strong>{submission.autoGradeScore}</strong></p>
+            <p className="mb-6 p-3 bg-blue-100 rounded-lg">Multiple Choices Score: <strong>{submission.autoGradeScore}</strong></p>
 
             <div className="space-y-6">
-                <h3 className="text-lg font-semibold">Jawaban Esai untuk Dinilai:</h3>
+                <h3 className="text-lg font-semibold">Essay Answers to be Graded</h3>
                 {studentAnswers.length > 0 ? studentAnswers.map(answer => (
                     <div key={answer.$id} className="bg-white p-4 rounded-lg shadow">
                         <p className="font-bold text-gray-800 mb-2">{answer.question?.questionText || 'Teks pertanyaan tidak tersedia'}</p>
@@ -130,7 +130,7 @@ const GradingDetailPage = () => {
                             <span className="ml-2 text-gray-600">/ {answer.question?.maxPoints || 100} poin</span>
                         </div>
                     </div>
-                )) : <p>Tidak ada jawaban esai pada kuis ini.</p>}
+                )) : <p>There are no essay answers on this quiz.</p>}
             </div>
 
             <button
@@ -138,7 +138,7 @@ const GradingDetailPage = () => {
                 className="mt-8 bg-blue-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
                 disabled={isLoading}
             >
-                {isLoading ? 'Menyimpan...' : 'Simpan Nilai Akhir & Selesaikan'}
+                {isLoading ? 'Saving...' : 'Save Final Score'}
             </button>
         </div>
     );

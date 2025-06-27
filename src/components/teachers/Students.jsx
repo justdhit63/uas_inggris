@@ -23,12 +23,12 @@ const Students = () => {
                     const studentData = JSON.parse(response.responseBody);
                     setStudents(studentData);
                 } else {
-                    throw new Error('Eksekusi fungsi gagal: ' + response.stderr);
+                    throw new Error('Execute Function Failed: ' + response.stderr);
                 }
 
             } catch (err) {
-                console.error("Gagal memuat data murid:", err);
-                setError("Gagal memuat data murid. Silakan coba lagi.");
+                console.error("Error fetching students data:", err);
+                setError("Error fetching students data. Try again later.");
             } finally {
                 setIsLoading(false);
             }
@@ -43,7 +43,7 @@ const Students = () => {
     );
 
     if (isLoading) {
-        return <div className="p-8 text-center">Memuat data murid...</div>;
+        return <div className="p-8 text-center">Load students data...</div>;
     }
 
     // Tampilan jika ada error
@@ -97,7 +97,7 @@ const Students = () => {
                         ) : (
                             <tr>
                                 <td colSpan="3" className="text-center py-6 text-gray-500">
-                                    Tidak ada murid yang cocok dengan pencarian.
+                                    No students matched your search.
                                 </td>
                             </tr>
                         )}

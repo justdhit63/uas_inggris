@@ -3,10 +3,11 @@
 // DIUBAH: Impor NavLink, Outlet, dan useOutlet. Hapus useState dan MaterialsTeacher.
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useOutlet } from 'react-router-dom';
-import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap } from "react-icons/fa";
+import { FaBookOpen, FaClipboardList, FaSignOutAlt, FaHome, FaGraduationCap, FaClipboardCheck } from "react-icons/fa";
 import { MdCalendarToday } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
 import { functions, databases } from '../../appwrite';
+import { FaClipboardQuestion } from 'react-icons/fa6';
 
 const DashboardTeacher = ({ user, onLogout }) => {
     const [students, setStudents] = useState([]);
@@ -40,11 +41,11 @@ const DashboardTeacher = ({ user, onLogout }) => {
                     const studentData = JSON.parse(response.responseBody);
                     setStudents(studentData);
                 } else {
-                    throw new Error('Eksekusi fungsi gagal: ' + response.stderr);
+                    throw new Error('Excution the function failed: ' + response.stderr);
                 }
 
             } catch (err) {
-                console.error("Gagal memuat data murid:", err);
+                console.error("Failed to load students data:", err);
             }
         };
 
@@ -164,17 +165,17 @@ const DashboardTeacher = ({ user, onLogout }) => {
                         <NavLink to="/dashboard/students" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
                             <BsPeopleFill /> Students
                         </NavLink>
-                        <NavLink to="/dashboard/grading" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
-                            <MdCalendarToday /> Attendance
-                        </NavLink>
                         <NavLink to="/dashboard/materials" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
                             <FaBookOpen /> Learning Materials
                         </NavLink>
                         <NavLink to="/dashboard/create-quiz" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
-                            <FaClipboardList /> Task
+                            <FaClipboardQuestion /> Create Quiz
+                        </NavLink>
+                        <NavLink to="/dashboard/grading" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
+                            <FaClipboardCheck /> Grade Quiz
                         </NavLink>
                         <NavLink to="/dashboard/grade-recap" style={({ isActive }) => isActive ? activeLinkStyle : undefined} className="flex items-center gap-3 text-gray-600 hover:text-[#ef5b4c] cursor-pointer">
-                            <FaClipboardList /> Recap
+                            <FaClipboardList /> Recap Quiz
                         </NavLink>
                     </nav>
                 </div>

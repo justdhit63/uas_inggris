@@ -24,7 +24,7 @@ const GradeRecapPage = () => {
                     setStudents(studentData);
                 }
             } catch (error) {
-                console.error("Gagal mengambil data siswa:", error);
+                console.error("Error Fetching Students Data: ", error);
             } finally {
                 setIsFetchingStudents(false);
             }
@@ -52,7 +52,7 @@ const GradeRecapPage = () => {
                 );
                 setGradedSubmissions(response.documents);
             } catch (error) {
-                console.error("Gagal mengambil rekap nilai:", error);
+                console.error("Error Fetching Recaps Data: ", error);
             } finally {
                 setIsLoading(false);
             }
@@ -62,19 +62,19 @@ const GradeRecapPage = () => {
     }, [selectedStudentId]);
 
     return (
-        <div className="p-8">
-            <h1 className="text-2xl font-bold mb-6">Rekap Nilai Siswa</h1>
+        <div className="p-8 w-full">
+            <h1 className="text-2xl font-bold mb-6">Students Grade Recap</h1>
 
-            {isFetchingStudents ? <p>Memuat daftar siswa...</p> : (
+            {isFetchingStudents ? <p>Load students list...</p> : (
                 <div className="mb-8">
-                    <label htmlFor="student-select" className="block text-lg font-medium mb-2">Pilih Siswa:</label>
+                    <label htmlFor="student-select" className="block text-lg font-medium mb-2">Select Student:</label>
                     <select
                         id="student-select"
                         value={selectedStudentId}
                         onChange={(e) => setSelectedStudentId(e.target.value)}
-                        className="w-full md:w-1/2 p-2 border rounded-lg"
+                        className="w-full md:w-1/4 p-2 border rounded-lg"
                     >
-                        <option value="">-- Pilih seorang siswa --</option>
+                        <option value="">-- Select a Student --</option>
                         {students.map(student => (
                             <option key={student.$id} value={student.$id}>{student.name}</option>
                         ))}
@@ -85,15 +85,15 @@ const GradeRecapPage = () => {
             {selectedStudentId && (
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h2 className="text-xl font-semibold mb-4">
-                        Riwayat Nilai untuk: {students.find(s => s.$id === selectedStudentId)?.name}
+                        Score History for: {students.find(s => s.$id === selectedStudentId)?.name}
                     </h2>
-                    {isLoading ? <p>Memuat nilai...</p> : (
+                    {isLoading ? <p>Loading Grade...</p> : (
                         <table className="w-full text-left">
                             <thead className="bg-gray-100 text-sm text-gray-600">
                                 <tr>
-                                    <th className="px-4 py-3">Judul Kuis</th>
-                                    <th className="px-4 py-3">Tanggal Pengerjaan</th>
-                                    <th className="px-4 py-3">Nilai Akhir</th>
+                                    <th className="px-4 py-3">Quiz Title</th>
+                                    <th className="px-4 py-3">Submission Date</th>
+                                    <th className="px-4 py-3">Final Score</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,7 +108,7 @@ const GradeRecapPage = () => {
                                 ) : (
                                     <tr>
                                         <td colSpan="3" className="text-center py-6 text-gray-500">
-                                            Siswa ini belum memiliki kuis yang sudah dinilai.
+                                            This student doesn't have any graded quizzes yet.
                                         </td>
                                     </tr>
                                 )}

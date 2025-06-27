@@ -31,7 +31,7 @@ const CreateQuizPage = () => {
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(0);
 
     const handleFinishCreation = () => {
-        alert('Kuis dan pertanyaan telah disimpan. Anda akan dikembalikan ke dashboard.');
+        alert('Quizzes and questions have been saved. You will be returned to the dashboard.');
         navigate('/dashboard'); // Arahkan kembali ke dashboard utama guru
     };
 
@@ -42,7 +42,7 @@ const CreateQuizPage = () => {
                 const response = await databases.listDocuments(DB_ID, MATERIALS_COLLECTION_ID);
                 setMaterials(response.documents);
             } catch (error) {
-                console.error("Gagal mengambil materi: ", error);
+                console.error("Error Fetching Materials: ", error);
             }
         }
         fetchMaterials();
@@ -64,10 +64,10 @@ const CreateQuizPage = () => {
                 quizFormData
             );
             setCreatedQuiz(newQuiz);
-            alert("Kuis berhasil dibuat! Sekarang tambahkan pertanyaan.");
+            alert("Quiz created successfully! Now add questions.");
         } catch (error) {
-            console.error("Gagal memuat kuis: ", error);
-            alert('Gagal membuat kuis.');
+            console.error("Failed to create quiz: ", error);
+            alert('Failed to create quiz');
         } finally {
             setIsLoading(false);
         }
@@ -103,14 +103,14 @@ const CreateQuizPage = () => {
                 ID.unique(),
                 questionData
             );
-            alert('Pertanyaan berhasil ditambahkan');
+            alert('Question added');
             // Reset form pertanyaan
             setQuestionText('');
             setOptions['', '', '', ''];
             setMaxPoints(10);
         } catch (error) {
-            console.error("Gagal menambah pertanyaan.", error);
-            alert('Gagal menambah pertanyaan.');
+            console.error("Failed adding question :", error);
+            alert('Failed adding question.');
         } finally {
             setIsLoading(false);
         }
@@ -118,34 +118,34 @@ const CreateQuizPage = () => {
 
 
     return (
-        <div className="p-8">
-            <h1 className="text-2xl font-bold mb-6">Buat Kuis Baru</h1>
+        <div className="p-8 w-full">
+            <h1 className="text-2xl font-bold mb-6">Create a New Quiz</h1>
 
             {/* Bagian 1: Form Membuat Kuis */}
-            <form onSubmit={handleCreateQuiz} className="bg-white p-6 rounded-lg shadow-md mb-8">
+            <form onSubmit={handleCreateQuiz} className="bg-white p-6 rounded-lg shadow-lg border-gray-100 mb-8">
                 <fieldset disabled={createdQuiz || isLoading}>
-                    <legend className="text-lg font-semibold mb-4">Detail Kuis</legend>
+                    <legend className="text-lg font-semibold mb-4">Quiz Detail</legend>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label htmlFor="title" className="block mb-2">Judul Kuis</label>
+                            <label htmlFor="title" className="block mb-2">Title</label>
                             <input type="text" id="title" name="title" value={quizFormData.title} onChange={handleQuizFormChange} className="w-full border rounded p-2" required />
                         </div>
                         <div>
-                            <label htmlFor="material" className="block mb-2">Terkait Materi</label>
+                            <label htmlFor="material" className="block mb-2">Related Material</label>
                             <select id="material" name="material" value={quizFormData.material} onChange={handleQuizFormChange} className="w-full border rounded p-2" required>
-                                <option value="" disabled>Pilih Materi</option>
+                                <option value="" disabled>Choose Material</option>
                                 {materials.map(mat => (
                                     <option key={mat.$id} value={mat.$id}>{mat.title}</option>
                                 ))}
                             </select>
                         </div>
                         <div className="md:col-span-2">
-                            <label htmlFor="description" className="block mb-2">Deskripsi (Opsional)</label>
+                            <label htmlFor="description" className="block mb-2">Description (Optional)</label>
                             <textarea id="description" name="description" value={quizFormData.description} onChange={handleQuizFormChange} className="w-full border rounded p-2"></textarea>
                         </div>
                     </div>
                     <button type="submit" className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400">
-                        {isLoading ? 'Menyimpan...' : 'Buat Kuis'}
+                        {isLoading ? 'Saving...' : 'Create Quiz'}
                     </button>
                 </fieldset>
             </form>
@@ -154,27 +154,27 @@ const CreateQuizPage = () => {
             {createdQuiz && (
                 <>
                     <form onSubmit={handleAddQuestion} className="bg-white p-6 rounded-lg shadow-md">
-                        <legend className="text-lg font-semibold mb-4">Tambah Pertanyaan untuk: {createdQuiz.title}</legend>
+                        <legend className="text-lg font-semibold mb-4">Add Question for: {createdQuiz.title}</legend>
 
                         {/* Pilihan Tipe Pertanyaan */}
                         <div className="mb-4">
-                            <label className="block mb-2">Tipe Pertanyaan</label>
+                            <label className="block mb-2">Question Type</label>
                             <select value={questionType} onChange={(e) => setQuestionType(e.target.value)} className="w-full md:w-1/3 border rounded p-2">
-                                <option value="multiple_choice">Pilihan Ganda</option>
-                                <option value="essay">Esai</option>
+                                <option value="multiple_choice">Multiple Choices</option>
+                                <option value="essay">Essay</option>
                             </select>
                         </div>
 
                         {/* Input Pertanyaan */}
                         <div className="mb-4">
-                            <label className="block mb-2">Teks Pertanyaan</label>
+                            <label className="block mb-2">Question Text</label>
                             <textarea value={questionText} onChange={(e) => setQuestionText(e.target.value)} className="w-full border rounded p-2" required></textarea>
                         </div>
 
                         {/* Input Dinamis Berdasarkan Tipe */}
                         {questionType === 'multiple_choice' && (
                             <div className="mb-4 border p-4 rounded">
-                                <h3 className="font-semibold mb-2">Pilihan Jawaban</h3>
+                                <h3 className="font-semibold mb-2">Answer Choices</h3>
                                 {options.map((opt, index) => (
                                     <div key={index} className="flex items-center mb-2">
                                         <input type="radio" name="correctAnswer" value={index} checked={correctAnswerIndex === index} onChange={() => setCorrectAnswerIndex(index)} className="mr-2" />
@@ -185,12 +185,12 @@ const CreateQuizPage = () => {
                         )}
 
                         <div className="mb-4">
-                            <label className="block mb-2">Poin Maksimal</label>
+                            <label className="block mb-2">Max Points</label>
                             <input type="number" value={maxPoints} onChange={(e) => setMaxPoints(e.target.value)} className="w-1/4 border rounded p-2" required />
                         </div>
 
                         <button type="submit" className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:bg-gray-400" disabled={isLoading}>
-                            {isLoading ? 'Menyimpan...' : 'Tambah Pertanyaan'}
+                            {isLoading ? 'Saving...' : 'Add Question'}
                         </button>
                     </form>
                     <div className="mt-8 flex justify-end">
@@ -198,7 +198,7 @@ const CreateQuizPage = () => {
                             onClick={handleFinishCreation}
                             className="bg-gray-700 text-white font-bold px-6 py-3 rounded-lg hover:bg-gray-800"
                         >
-                            Selesai & Kembali ke Dashboard
+                            Finish & Back to Dashboard
                         </button>
                     </div>
                 </>
