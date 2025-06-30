@@ -76,8 +76,8 @@ const QuizListStudent = () => {
                     quizzes.map(quiz => (
                         <div key={quiz.$id} className="bg-white p-4 rounded-lg shadow-md flex justify-between items-center h-32">
                             <div>
-                                <h2 className="text-lg font-bold">{quiz.title}</h2>
-                                <p className="text-sm text-gray-600">{quiz.description}</p>
+                                <h2 className="text-xs font-bold">{quiz.title}</h2>
+                                {/* <p className="text-sm text-gray-600">{quiz.description}</p> */}
                             </div>
                             <div>
                                 {renderStatusButton(quiz)}

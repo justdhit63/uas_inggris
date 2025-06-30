@@ -59,28 +59,28 @@ const DashboardTeacher = ({ user, onLogout }) => {
         getMaterials();
     }, [])
 
-    useEffect(() => {
-        const fetchStudents = async () => {
-            try {
-                // Panggil Appwrite Function berdasarkan NAMA atau ID-nya
-                // Pastikan nama 'getStudents' sama dengan nama fungsi di dashboard Appwrite
-                const response = await functions.createExecution('685d0bac00245689b453');
+    // useEffect(() => {
+    //     const fetchStudents = async () => {
+    //         try {
+    //             // Panggil Appwrite Function berdasarkan NAMA atau ID-nya
+    //             // Pastikan nama 'getStudents' sama dengan nama fungsi di dashboard Appwrite
+    //             const response = await functions.createExecution('685fba1400251a6883fa');
 
-                // Response dari function adalah string JSON, jadi perlu di-parse
-                if (response.status === 'completed') {
-                    const studentData = JSON.parse(response.responseBody);
-                    setStudents(studentData);
-                } else {
-                    throw new Error('Excution the function failed: ' + response.stderr);
-                }
+    //             // Response dari function adalah string JSON, jadi perlu di-parse
+    //             if (response.status === 'completed') {
+    //                 const studentData = JSON.parse(response.responseBody);
+    //                 setStudents(studentData);
+    //             } else {
+    //                 throw new Error('Excution the function failed: ' + response.stderr);
+    //             }
 
-            } catch (err) {
-                console.error("Failed to load students data:", err);
-            }
-        };
+    //         } catch (err) {
+    //             console.error("Failed to load students data:", err);
+    //         }
+    //     };
 
-        fetchStudents();
-    }, []);
+    //     fetchStudents();
+    // }, []);
 
     // DIHAPUS: State untuk mengganti view tidak diperlukan lagi.
     // const [currentView, setCurrentView] = useState('dashboard');
@@ -133,7 +133,7 @@ const DashboardTeacher = ({ user, onLogout }) => {
                     <div className="flex justify-between items-center"><span>Total Materials</span><FaBookOpen className="text-xl" /></div>
                 </Link>
                 <Link to='/dashboard/students' className="bg-teal-400 text-white p-6 rounded-lg shadow flex flex-col justify-between">
-                    <div className="text-3xl font-bold">{students.length}</div>
+                    {/* <div className="text-3xl font-bold">{students.length}</div> */}
                     <div className="flex justify-between items-center"><span>Students</span><FaGraduationCap className="text-xl" /></div>
                 </Link>
             </div>
@@ -151,7 +151,7 @@ const DashboardTeacher = ({ user, onLogout }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {students.length > 0 ? (
+                            {/* {students.length > 0 ? (
                                 students.map((student) => (
                                     <tr key={student.$id} className="border-b">
                                         <td className="py-2 flex items-center gap-2">
@@ -164,7 +164,7 @@ const DashboardTeacher = ({ user, onLogout }) => {
                                 ))
                             ) : (
                                 <p>None..</p>
-                            )}
+                            )} */}
 
                         </tbody>
                     </table>

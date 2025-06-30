@@ -22,7 +22,7 @@ const GradingListPage = () => {
     useEffect(() => {
         const fetchAllStudents = async () => {
             try {
-                const response = await functions.createExecution('685d0bac00245689b453'); // Panggil fungsi getStudents
+                const response = await functions.createExecution('685fba1400251a6883fa'); // Panggil fungsi getStudents
                 if (response.status === 'completed') {
                     const studentData = JSON.parse(response.responseBody);
                     // Ubah array siswa menjadi Map untuk pencarian cepat berdasarkan ID

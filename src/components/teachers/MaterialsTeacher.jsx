@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
     FaPlus,
@@ -43,34 +44,34 @@ const MaterialsTeacher = () => {
     }, [])
 
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData({
+    //         ...formData,
+    //         [name]: value,
+    //     });
+    // };
 
     const resetForm = () => {
         setFormData({ chapter: "", title: "", content: "" });
         setEditId(null);
     }
 
-    const handleAdd = async () => {
-        if (!formData.title || !formData.chapter || !formData.content) return;
-        try {
-            const response = await databases.createDocument(
-                DATABASE_ID,
-                COLLECTION_ID,
-                ID.unique(),
-                formData
-            );
-            setMaterials([...materials, response]);
-            resetForm();
-        } catch (error) {
-            console.error("Error adding material: ", error);
-        }
-    };
+    // const handleAdd = async () => {
+    //     if (!formData.title || !formData.chapter || !formData.content) return;
+    //     try {
+    //         const response = await databases.createDocument(
+    //             DATABASE_ID,
+    //             COLLECTION_ID,
+    //             ID.unique(),
+    //             formData
+    //         );
+    //         setMaterials([...materials, response]);
+    //         resetForm();
+    //     } catch (error) {
+    //         console.error("Error adding material: ", error);
+    //     }
+    // };
 
     const handleEdit = (material) => {
         setEditId(material.$id);
@@ -81,22 +82,22 @@ const MaterialsTeacher = () => {
         });
     };
 
-    const handleUpdate = async () => {
-        if (!editId) return;
-        try {
-            const response = await databases.updateDocument(
-                DATABASE_ID,
-                COLLECTION_ID,
-                editId,
-                formData
-            );
-            setMaterials(
-                materials.map((item) => (item.$id === editId ? response : item))
-            );
-        } catch (error) {
-            console.error("Error updating material: ", error);
-        }
-    };
+    // const handleUpdate = async () => {
+    //     if (!editId) return;
+    //     try {
+    //         const response = await databases.updateDocument(
+    //             DATABASE_ID,
+    //             COLLECTION_ID,
+    //             editId,
+    //             formData
+    //         );
+    //         setMaterials(
+    //             materials.map((item) => (item.$id === editId ? response : item))
+    //         );
+    //     } catch (error) {
+    //         console.error("Error updating material: ", error);
+    //     }
+    // };
 
     const handleDelete = async (documentId) => {
         try {
@@ -120,8 +121,8 @@ const MaterialsTeacher = () => {
 
     return (
         <div className="w-full p-6">
-            {/* Main Content */}
-                <div className="bg-white p-6 rounded-lg shadow mb-8">
+            Main Content
+                {/* <div className="bg-white p-6 rounded-lg shadow mb-8">
                     <h2 className="text-xl font-semibold mb-4">
                         {editId ? "Edit Material" : "Add New Material"}
                     </h2>
@@ -152,7 +153,7 @@ const MaterialsTeacher = () => {
                             </button>
                         )}
                     </div>
-                </div>
+                </div> */}
 
                 <div className="bg-white rounded-lg shadow overflow-auto">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -161,7 +162,6 @@ const MaterialsTeacher = () => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Chapter</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Content</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -172,10 +172,6 @@ const MaterialsTeacher = () => {
                                             <td className="px-6 py-4">{item.chapter}</td>
                                             <td className="px-6 py-4">{item.title}</td>
                                             <td className="px-6 py-4 truncate max-w-sm">{item.content}</td>
-                                            <td className="px-6 py-4 text-right">
-                                                <button className="text-yellow-600 mr-3" onClick={() => handleEdit(item)}> <FaPencilAlt /> </button>
-                                                <button className="text-red-600" onClick={() => handleDelete(item.$id)}> <FaTrash /> </button> {/* DIUBAH: kirim item.$id */}
-                                            </td>
                                         </tr>
                                     ))
                                 ) : (

@@ -17,6 +17,11 @@ import GradingDetailPage from './components/teachers/GradingDetailPage';
 import GradeRecapPage from './components/teachers/GradeRecapPage';
 import UploadBookPage from './components/teachers/UploadBookPage';
 import BookSectionPage from './components/students/BookSectionPage';
+import Chapter1 from './components/students/widgets/Chapter1';
+import Chapter3 from './components/students/widgets/Chapter3';
+import Chapter4 from './components/students/widgets/Chapter4';
+import Chapter5 from './components/students/widgets/Chapter5';
+import Chapter2 from './components/students/widgets/Chapter2';
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -97,6 +102,11 @@ const App = () => {
           <Route path="tasks" element={<QuizListStudent />} />
           <Route path="take-quiz/:quizId" element={<TakeQuizPage />} />
           <Route path="books" element={<BookSectionPage />} />
+          <Route path="chapter-1" element={<Chapter1 />}/>
+          <Route path="chapter-2" element={<Chapter2 />}/>
+          <Route path="chapter-3" element={<Chapter3 />}/>
+          <Route path="chapter-4" element={<Chapter4 />}/>
+          <Route path="chapter-5" element={<Chapter5 />}/>
         </Route>
       </Routes>
     </div>

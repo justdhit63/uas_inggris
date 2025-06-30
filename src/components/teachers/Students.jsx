@@ -16,7 +16,7 @@ const Students = () => {
             try {
                 // Panggil Appwrite Function berdasarkan NAMA atau ID-nya
                 // Pastikan nama 'getStudents' sama dengan nama fungsi di dashboard Appwrite
-                const response = await functions.createExecution('685d0bac00245689b453');
+                const response = await functions.createExecution('685fba1400251a6883fa');
 
                 // Response dari function adalah string JSON, jadi perlu di-parse
                 if (response.status === 'completed') {

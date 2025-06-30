@@ -39,7 +39,7 @@ const GradingDetailPage = () => {
 
                 // 3. DITAMBAHKAN: Ambil nama siswa menggunakan studentId dari submission
                 if (subResponse.studentId) {
-                    const studentsResponse = await functions.createExecution('685d0bac00245689b453');
+                    const studentsResponse = await functions.createExecution('685fba1400251a6883fa');
                     if (studentsResponse.status === 'completed') {
                         const allStudents = JSON.parse(studentsResponse.responseBody);
                         const currentStudent = allStudents.find(student => student.$id === subResponse.studentId);

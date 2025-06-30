@@ -38,7 +38,8 @@ const MaterialsStudent = () => {
     }, [getMaterials()])
 
     const accordionItems = materials.map(material => ({
-        title: `${material.chapter}: ${material.title}`,
+        title: material.title,
+        chapter: material.chapter,
         content: material.content
     }));
 
